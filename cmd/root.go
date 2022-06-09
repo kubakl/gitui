@@ -26,5 +26,12 @@ func mergetool(cmd *cobra.Command, args []string) {
 	}
 
 	index, err := repo.Index()
-	fmt.Println(index.HasConflicts())
+	if index.HasConflicts() {
+		confictIter, _ := index.ConflictIterator()
+		conflict, err := confictIter.Next()
+		for err == nil {
+			fmt.Println(conflict.Ancestor.Id)
+			conflict, err = confictIter.Next()
+		}
+	}
 }
